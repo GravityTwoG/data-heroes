@@ -83,11 +83,10 @@ API:
    }
    ```
 
-3. Проверка возможности отправки уведомления `POST /evaluate`  
+3. Проверка возможности отправки уведомления `POST /users/:id/preferences/evaluate`  
    Вход:
    ```json
    {
-     "userId": "user-1",
      "type": "marketing",
      "channel": "email",
      "region": "EU",
@@ -261,10 +260,11 @@ src/
   lib/ reusable, not domain specific utilities (logger)
   repositories/ - repositories abstracting work with prisma, mapping db records to domain entities
   domain/
+    interfaces/   - definitions of interfaces required for domain
     entities/     - domain entities decoupled from database records, error
     services/     - reusable domain logic
     usecases/     - business logic
-  controllers/  - exposing business logic via REST API
+  http/  - exposing business logic via REST API
   config.ts     - app config, validated by Zod
   main.ts       - app bootstrap logic
 tests/e2e - e2e tests

@@ -1,0 +1,5 @@
+name: data-heroes-notification-preferences-system
+
+services:
+  postgres:
+    image: postgres:18
