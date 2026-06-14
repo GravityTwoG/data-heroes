@@ -1,6 +1,10 @@
 import { defineConfig, env } from "prisma/config";
 
-process.loadEnvFile(".env");
+try {
+  process.loadEnvFile(".env");
+} catch {
+  // No .env file present (e.g., running inside Docker with injected env vars)
+}
 
 export default defineConfig({
   schema: "prisma/schema.prisma",
