@@ -354,36 +354,6 @@ describe.sequential("POST /api/v1/users/:id/preferences/evaluate", () => {
         reason: Reason.BLOCKED_BY_GLOBAL_POLICY,
       },
     },
-    {
-      name: "allows by global policy when enabled",
-      seed: {
-        defaults: [
-          {
-            type: NotificationType.MARKETING,
-            channel: NotificationChannel.PUSH,
-            enabled: false,
-          },
-        ],
-        policies: [
-          {
-            type: NotificationType.MARKETING,
-            channel: NotificationChannel.PUSH,
-            region: "US",
-            enabled: true,
-          },
-        ],
-      },
-      input: {
-        type: NotificationType.MARKETING,
-        channel: NotificationChannel.PUSH,
-        region: "US",
-        datetime: DT.day,
-      },
-      expected: {
-        decision: Decision.ALLOW,
-        reason: Reason.ALLOWED_BY_GLOBAL_POLICY,
-      },
-    },
     // MAX: blocked in EU, falls through to defaults in RU
     {
       name: "allows MAX in Russia when global policy only blocks Europe",
@@ -482,79 +452,6 @@ describe.sequential("POST /api/v1/users/:id/preferences/evaluate", () => {
       expected: {
         decision: Decision.DENY,
         reason: Reason.BLOCKED_BY_GLOBAL_POLICY,
-      },
-    },
-    {
-      name: "global policy allows even when user explicitly disabled",
-      seed: {
-        defaults: [
-          {
-            type: NotificationType.MARKETING,
-            channel: NotificationChannel.EMAIL,
-            enabled: false,
-          },
-        ],
-        policies: [
-          {
-            type: NotificationType.MARKETING,
-            channel: NotificationChannel.EMAIL,
-            region: "EU",
-            enabled: true,
-          },
-        ],
-      },
-      userSetup: () =>
-        setPreferences({
-          preference: {
-            type: NotificationType.MARKETING,
-            channel: NotificationChannel.EMAIL,
-            enabled: false,
-          },
-        }),
-      input: {
-        type: NotificationType.MARKETING,
-        channel: NotificationChannel.EMAIL,
-        region: "EU",
-        datetime: DT.day,
-      },
-      expected: {
-        decision: Decision.ALLOW,
-        reason: Reason.ALLOWED_BY_GLOBAL_POLICY,
-      },
-    },
-    // Global policy takes priority over quiet hours (такая логика, под вопросом, мб стоило тихие часы выше поставить по приоритету)
-    {
-      name: "global policy allows even during quiet hours",
-      seed: {
-        defaults: [
-          {
-            type: NotificationType.MARKETING,
-            channel: NotificationChannel.EMAIL,
-            enabled: true,
-          },
-        ],
-        policies: [
-          {
-            type: NotificationType.MARKETING,
-            channel: NotificationChannel.EMAIL,
-            region: "EU",
-            enabled: true,
-          },
-        ],
-      },
-      userSetup: () =>
-        setPreferences({
-          quietHours: { start: "13:00", end: "15:00", timezone: "UTC" },
-        }),
-      input: {
-        type: NotificationType.MARKETING,
-        channel: NotificationChannel.EMAIL,
-        region: "EU",
-        datetime: DT.day,
-      },
-      expected: {
-        decision: Decision.ALLOW,
-        reason: Reason.ALLOWED_BY_GLOBAL_POLICY,
       },
     },
   ];

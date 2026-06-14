@@ -18,13 +18,12 @@ export const Decision = {
 export type Decision = Values<typeof Decision>;
 
 export const Reason = {
-  ALLOWED_BY_GLOBAL_POLICY: "allowed_by_global_policy",
   ALLOWED_BY_USER_PREFERENCES: "allowed_by_user_preferences",
   ALLOWED_BY_DEFAULT_PREFERENCES: "allowed_by_default_preferences",
 
   BLOCKED_BY_GLOBAL_POLICY: "blocked_by_global_policy",
-  BLOCKED_BY_USER_PREFERENCES: "blocked_by_user_preferences",
   BLOCKED_BY_QUIET_HOURS: "blocked_by_quiet_hours",
+  BLOCKED_BY_USER_PREFERENCES: "blocked_by_user_preferences",
   BLOCKED_BY_DEFAULT_PREFERENCES: "blocked_by_default_preferences",
 } as const;
 export type Reason = Values<typeof Reason>;
@@ -63,13 +62,9 @@ export const buildEvaluatePreferences = (params: Params) => {
     const { userId, type, channel, region, datetime } = dto;
 
     const policy = await globalRepo.get({ type, channel, region });
-    if (policy) {
-      const result: EvaluateResult = policy.enabled
-        ? { decision: Decision.ALLOW, reason: Reason.ALLOWED_BY_GLOBAL_POLICY }
-        : { decision: Decision.DENY, reason: Reason.BLOCKED_BY_GLOBAL_POLICY };
-
+    if (policy && !policy.enabled) {
+      const result: EvaluateResult = { decision: Decision.DENY, reason: Reason.BLOCKED_BY_GLOBAL_POLICY };
       logger.info({ userId, type, channel, region, result }, "evaluated");
-
       return result;
     }
 
