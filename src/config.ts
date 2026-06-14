@@ -7,7 +7,7 @@ const ConfigSchema = z.object({
   port: z.coerce.number().default(3000),
 
   databaseURL: z.string().min(1),
-  databasePoolMax: z.coerce.number().default(10),
+  databasePoolConnectionsLimit: z.coerce.number().default(10),
 });
 
 export type Config = z.infer<typeof ConfigSchema>;
@@ -20,6 +20,6 @@ export function parseConfig(): Config {
     port: process.env.PORT,
 
     databaseURL: process.env.DATABASE_URL,
-    databasePoolMax: process.env.DATABASE_POOL_MAX,
+    databasePoolMax: process.env.DATABASE_POOL_CONNECTIONS_LIMIT,
   });
 }

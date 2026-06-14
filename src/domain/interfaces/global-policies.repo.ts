@@ -8,5 +8,5 @@ export interface IGlobalPoliciesRepository {
     type: NotificationType;
     channel: NotificationChannel;
     region: Region;
-  }): Promise<GlobalPolicy>;
+  }): Promise<GlobalPolicy | null>;
 }

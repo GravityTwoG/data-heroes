@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model DefaultPreference {
+  type      String   @map("notification_type")
+  channel   String   @map("notification_channel")
+  enabled   Boolean
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@id([type, channel])
+  @@map("default_preferences")
+}
+
+model UserPreference {
+  userId    String   @map("user_id") @db.Uuid
+  type      String   @map("notification_type")
+  channel   String   @map("notification_channel")
+  enabled   Boolean
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@id([userId, type, channel])
+  @@map("user_preferences")
+}
+
+model UserQuietHours {
+  userId    String   @id @map("user_id") @db.Uuid
+  start     String
+  end       String
+  timezone  String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("user_quiet_hours")
+}
+
+model GlobalPolicy {
+  type      String   @map("notification_type")
+  channel   String   @map("notification_channel")
+  region    String
+  enabled   Boolean
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@id([type, channel, region])
+  @@map("global_policies")
+}

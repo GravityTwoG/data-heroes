@@ -2,6 +2,7 @@ import { AsyncLocalStorage } from "node:async_hooks";
 
 import { buildLogger } from "@/lib/logger";
 import { Config } from "@/config";
+import { buildPrismaClient } from "@/lib/prisma";
 import { buildRepositories } from "@/repositories";
 import { buildUseCases } from "@/domain/usecases";
 import { buildHTTPServer } from "@/http";
@@ -27,9 +28,14 @@ export const createApp = async ({ config }: { config: Config }) => {
     });
   });
 
-  const repositories = buildRepositories();
+  const prisma = buildPrismaClient({
+    databaseURL: config.databaseURL,
+    poolConnectionsLimit: config.databasePoolConnectionsLimit,
+  });
 
-  const useCases = buildUseCases({ repositories });
+  const repositories = buildRepositories(prisma);
+
+  const useCases = buildUseCases({ repositories, logger });
 
   const httpServer = buildHTTPServer({
     useCases,

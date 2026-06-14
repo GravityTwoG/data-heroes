@@ -18,5 +18,5 @@
     "tests/**/*",
     "scripts/**/*",
   ],
-  "exclude": ["node_modules", "dist", "dev-dist", "src/generated"],
+  "exclude": ["node_modules", "dist", "dev-dist"],
 }

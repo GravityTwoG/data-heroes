@@ -1,5 +1,6 @@
+import { Logger } from "@/lib/logger";
 import { IDefaultPreferencesRepository } from "@/domain/interfaces/default-preferences.repo";
-import { buildEvaluatePreferences } from "./evaluate";
+import { buildEvaluatePreferences } from "./evaluate/evaluate";
 import { buildGetPreferences } from "./get";
 import { buildUpdatePreferences } from "./update";
 import { IUserPreferencesRepository } from "@/domain/interfaces/user-preferences.repo";
@@ -11,6 +12,7 @@ export const buildPreferences = (params: {
     userPreferences: IUserPreferencesRepository;
     globalPolicies: IGlobalPoliciesRepository;
   };
+  logger: Logger;
 }) => {
   return {
     getPreferences: buildGetPreferences(params),

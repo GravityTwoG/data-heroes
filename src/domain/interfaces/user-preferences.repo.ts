@@ -1,14 +1,27 @@
 import { NotificationChannel } from "../entities/notification-channel";
 import { NotificationType } from "../entities/notification-type";
-import { UserPreference, UserPreferences } from "../entities/user-preferences";
+import {
+  UserPreference,
+  UserPreferences,
+  UserQuietHours,
+} from "../entities/user-preferences";
 
 export interface IUserPreferencesRepository {
-  get(userId: string): Promise<UserPreferences>;
+  get(userId: string): Promise<UserPreferences | null>;
+
   getPreference(filters: {
     userId: string;
     type: NotificationType;
     channel: NotificationChannel;
-  }): Promise<UserPreference>;
+  }): Promise<UserPreference | null>;
 
-  upsert(userId: string, data: UserPreferences): Promise<UserPreferences>;
+  getQuietHours(userId: string): Promise<UserQuietHours | null>;
+
+  upsert(
+    userId: string,
+    data: {
+      preference?: UserPreference;
+      quietHours?: UserQuietHours | null;
+    },
+  ): Promise<void>;
 }

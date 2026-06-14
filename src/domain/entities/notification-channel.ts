@@ -10,9 +10,9 @@ export const NotificationChannel = {
 } as const;
 export type NotificationChannel = Values<typeof NotificationChannel>;
 
-export const validNotificationChannels = Object.keys(
+export const validNotificationChannels = Object.values(
   NotificationChannel,
-) as NotificationChannel[];
+);
 
 export const isNotificationChannelValid = (value: string) => {
   return (validNotificationChannels as string[]).includes(value);

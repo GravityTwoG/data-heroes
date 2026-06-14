@@ -1,12 +1,15 @@
 import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { z } from "zod";
 
-import type { UseCases } from "@/domain/usecases";
-import { ErrorSchema } from "../lib/error-schema";
 import { Logger } from "@/lib/logger";
-import { OpenAPIOperationId } from "../lib/openapi-operation-ids";
 import { validNotificationChannels } from "@/domain/entities/notification-channel";
 import { validNotificationTypes } from "@/domain/entities/notification-type";
+import type { UseCases } from "@/domain/usecases";
+import { ErrorSchema } from "../lib/error-schema";
+import { OpenAPIOperationId } from "../lib/openapi-operation-ids";
+
+import { TimeStringSchema } from "../lib/time-schema";
+import { TimezoneSchema } from "../lib/timezone-schema";
 
 const NotificationChannelSchema = z.enum(validNotificationChannels);
 
@@ -31,12 +34,12 @@ const UserPreferencesSchema = z.object({
 });
 
 const UpdateUserPreferencesSchema = z.object({
-  channels: z.array(ChannelSchema).optional(),
+  preference: ChannelSchema.optional(),
   quietHours: z
     .object({
-      start: z.string(),
-      end: z.string(), // TODO: validate time
-      timezone: z.string(), // TODO: validate timezone
+      start: TimeStringSchema,
+      end: TimeStringSchema,
+      timezone: TimezoneSchema,
     })
     .nullable()
     .optional(),
@@ -46,7 +49,12 @@ const EvaluatePreferencesSchema = z.object({
   channel: NotificationChannelSchema,
   type: NotificationTypeSchema,
   region: z.string(), // TODO: set format
-  datetime: z.date(), // TODO: set format
+  datetime: z.coerce.date(), // TODO: set format
+});
+
+const EvaluateResultSchema = z.object({
+  decision: z.enum(["allow", "deny"]),
+  reason: z.string(),
 });
 
 export const registerPreferncesRoutes: FastifyPluginAsyncZod<{
@@ -76,15 +84,16 @@ export const registerPreferncesRoutes: FastifyPluginAsyncZod<{
       params: z.object({ id: z.uuidv7() }),
       body: UpdateUserPreferencesSchema,
       response: {
-        200: UserPreferencesSchema,
         400: ErrorSchema,
       },
     },
     handler: async (req) => {
-      return useCases.updatePreferences({
-        ...req.body,
+      const { preference, quietHours } = req.body;
 
+      return useCases.updatePreferences({
         userId: req.params.id,
+        channel: preference,
+        quietHours,
       });
     },
   });
@@ -95,7 +104,7 @@ export const registerPreferncesRoutes: FastifyPluginAsyncZod<{
       params: z.object({ id: z.uuidv7() }),
       body: EvaluatePreferencesSchema,
       response: {
-        200: UserPreferencesSchema,
+        200: EvaluateResultSchema,
         400: ErrorSchema,
       },
     },
