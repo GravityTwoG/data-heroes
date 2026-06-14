@@ -71,6 +71,8 @@ npm run test:coverage
 
 Покрытие доменной логики (`src/domain/usecases`) и репозиториев (`src/repositories/*.repo.ts`) — 100% по statements, branches и functions.
 
+Unit-тестами покрыты только чистые утилиты (`isInQuietHours`, валидация таймзон, временных строк, регионов) — включая граничные случаи DST и перехода через полночь. Всё остальное проверяется e2e с реальной БД.
+
 ---
 
 ## Решение
@@ -220,13 +222,12 @@ enum EvaluatePreferencesDecision {
 }
 
 enum EvaluatePreferencesDecisionReason {
-  ALLOWED_BY_GLOBAL_POLICY = 'allowed_by_global_policy'
   ALLOWED_BY_USER_PREFERENCES = 'allowed_by_user_preferences'
   ALLOWED_BY_DEFAULT_PREFERENCES = 'allowed_by_default_preferences'
 
   BLOCKED_BY_GLOBAL_POLICY = 'blocked_by_global_policy'
-  BLOCKED_BY_USER_PREFERENCES = 'blocked_by_user_preferences'
   BLOCKED_BY_QUIET_HOURS = 'blocked_by_quiet_hours'
+  BLOCKED_BY_USER_PREFERENCES = 'blocked_by_user_preferences'
   BLOCKED_BY_DEFAULT_PREFERENCES = 'blocked_by_default_preferences'
 }
 
