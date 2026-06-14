@@ -1,15 +1,9 @@
 // inspired by https://github.com/fastify/fastify-request-context/blob/main/index.js
 import { AsyncLocalStorage, AsyncResource } from "node:async_hooks";
-import {
-  FastifyInstance,
-  FastifyReply,
-  FastifyRequest,
-  HookHandlerDoneFunction,
-} from "fastify";
 
-export const registerRequestContext = <
-  RequestALS extends AsyncLocalStorage<unknown>,
->({
+import { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
+
+export const registerRequestContext = <RequestALS extends AsyncLocalStorage<unknown>>({
   app,
   requestALS,
   onRequest,

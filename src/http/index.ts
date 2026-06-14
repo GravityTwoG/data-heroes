@@ -9,7 +9,8 @@ import {
 } from "@fastify/type-provider-zod";
 import Fastify, { type FastifyInstance } from "fastify";
 
-import { Config } from "@/config";
+import { Logger } from "@/lib/logger";
+
 import {
   ConflictError,
   DomainError,
@@ -19,12 +20,14 @@ import {
   UnauthorizedError,
   UnprocessableError,
 } from "@/domain/entities/error";
+
 import type { UseCases } from "@/domain/usecases";
 
-import { registerRoutes } from "./v1";
+import { Config } from "@/config";
+
 import { withNamedOperationSchemas } from "./lib/openapi-components";
 import { registerRequestContext } from "./lib/request-context";
-import { Logger } from "@/lib/logger";
+import { registerRoutes } from "./v1";
 
 export function buildHTTPServer({
   useCases,
@@ -41,8 +44,7 @@ export function buildHTTPServer({
     logger: true,
     trustProxy: 1,
 
-    genReqId: (req) =>
-      (req.headers["x-request-id"] as string) ?? crypto.randomUUID(),
+    genReqId: (req) => (req.headers["x-request-id"] as string) ?? crypto.randomUUID(),
   });
 
   app.setValidatorCompiler(validatorCompiler);
@@ -107,9 +109,7 @@ export function buildHTTPServer({
     if (err instanceof DomainError) {
       return rep.status(400).send({ message: err.message });
     }
-    return rep
-      .status((err as any).statusCode || 500)
-      .send({ message: (err as any).message });
+    return rep.status((err as any).statusCode || 500).send({ message: (err as any).message });
   });
 
   registerRoutes({ app, useCases, logger });

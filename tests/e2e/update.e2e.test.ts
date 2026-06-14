@@ -1,10 +1,9 @@
-import { describe, it, expect, beforeAll, afterAll } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import type { FastifyInstance } from "fastify";
 
 import { NotificationChannel } from "@/domain/entities/values/notification-channel";
 import { NotificationType } from "@/domain/entities/values/notification-type";
-import { DefaultPreference } from "@/domain/entities/default-preference";
-import { createTestApp, truncateAll, seedDefaultPreferences } from "./helpers";
+import { createTestApp, seedDefaultPreferences, truncateAll } from "./helpers";
 
 describe.sequential("POST /api/v1/users/:id/preferences", () => {
   let app: FastifyInstance;

@@ -1,12 +1,14 @@
+import { DefaultPreference } from "@/domain/entities/default-preference";
+import { NotificationChannel } from "@/domain/entities/values/notification-channel";
+import { NotificationType } from "@/domain/entities/values/notification-type";
+
+import { IDefaultPreferencesRepository } from "@/domain/interfaces/default-preferences.repo";
+
 import {
   PrismaClient,
   DefaultPreference as PrismaDefaultPreference,
 } from "@/generated/prisma/client";
 
-import { DefaultPreference } from "@/domain/entities/default-preference";
-import { NotificationChannel } from "@/domain/entities/values/notification-channel";
-import { NotificationType } from "@/domain/entities/values/notification-type";
-import { IDefaultPreferencesRepository } from "@/domain/interfaces/default-preferences.repo";
 import { prismaQuery } from "./lib";
 
 const toEntity = (record: PrismaDefaultPreference): DefaultPreference => ({

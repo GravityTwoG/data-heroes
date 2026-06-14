@@ -13,31 +13,19 @@ function toDomainError(err: unknown): unknown {
     switch (err.code) {
       case "P2002": {
         const target = err.meta?.["target"];
-        return new ConflictError(
-          "Record already exists",
-          { target },
-          { cause: err },
-        );
+        return new ConflictError("Record already exists", { target }, { cause: err });
       }
       // Record to update/delete does not exist
       case "P2025":
         return new NotFoundError("Record not found", { cause: err });
       case "P2003":
-        return new ConflictError(
-          "Operation violates a relation constraint",
-          undefined,
-          {
-            cause: err,
-          },
-        );
+        return new ConflictError("Operation violates a relation constraint", undefined, {
+          cause: err,
+        });
       case "P2014":
-        return new ConflictError(
-          "Operation violates a required relation",
-          undefined,
-          {
-            cause: err,
-          },
-        );
+        return new ConflictError("Operation violates a required relation", undefined, {
+          cause: err,
+        });
       case "P2034":
         return new ConflictError("Write conflict, please retry", undefined, {
           cause: err,
@@ -57,9 +45,7 @@ function toDomainError(err: unknown): unknown {
 }
 
 // Wraps a repository method so its errors are mapped to domain errors at the boundary.
-export function prismaQuery<R extends (...args: any[]) => Promise<any>>(
-  run: R,
-): R {
+export function prismaQuery<R extends (...args: any[]) => Promise<any>>(run: R): R {
   return (async (...args) => {
     try {
       return await run(...args);

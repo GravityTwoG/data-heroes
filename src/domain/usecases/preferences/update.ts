@@ -1,8 +1,7 @@
 import { Logger } from "@/lib/logger";
-import {
-  UserQuietHours,
-  UserPreference,
-} from "@/domain/entities/user-preferences";
+
+import { UserPreference, UserQuietHours } from "@/domain/entities/user-preferences";
+
 import { IUserPreferencesRepository } from "@/domain/interfaces/user-preferences.repo";
 
 type Params = {

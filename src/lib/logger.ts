@@ -1,5 +1,6 @@
-import pino from "pino";
 import type { AsyncLocalStorage } from "async_hooks";
+
+import pino from "pino";
 
 export function buildLogger(als: AsyncLocalStorage<{ requestId: string }>) {
   return pino({

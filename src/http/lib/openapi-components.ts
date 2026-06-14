@@ -42,15 +42,7 @@ enum OpenAPIStatusCode {
   UNPROCESSABLE_ENTITY = "422",
 }
 
-const HTTP_METHODS = new Set([
-  "get",
-  "post",
-  "put",
-  "patch",
-  "delete",
-  "head",
-  "options",
-]);
+const HTTP_METHODS = new Set(["get", "post", "put", "patch", "delete", "head", "options"]);
 
 const SUCCESS_STATUS_CODES = new Set<string>([
   OpenAPIStatusCode.OK,
@@ -68,9 +60,7 @@ const RESPONSE_SUFFIX_BY_STATUS: Record<string, string> = {
   [OpenAPIStatusCode.UNPROCESSABLE_ENTITY]: "UnprocessableEntityResponse",
 };
 
-export function withNamedOperationSchemas<TDocument>(
-  document: TDocument,
-): TDocument {
+export function withNamedOperationSchemas<TDocument>(document: TDocument): TDocument {
   const openAPIDocument = document as OpenAPIDocument;
   const schemas = openAPIDocument.components?.schemas ?? {};
   openAPIDocument.components = {
@@ -80,11 +70,7 @@ export function withNamedOperationSchemas<TDocument>(
 
   Object.entries(openAPIDocument.paths ?? {}).forEach(([, pathItem]) => {
     Object.entries(pathItem).forEach(([method, operation]) => {
-      if (
-        !HTTP_METHODS.has(method) ||
-        !isOperation(operation) ||
-        !operation.operationId
-      ) {
+      if (!HTTP_METHODS.has(method) || !isOperation(operation) || !operation.operationId) {
         return;
       }
 
@@ -115,26 +101,18 @@ function moveRequestBodySchema(
   mediaType.schema = toReference(componentName);
 }
 
-function moveResponseSchemas(
-  schemas: Record<string, OpenAPISchema>,
-  operation: OpenAPIOperation,
-) {
-  Object.entries(operation.responses ?? {}).forEach(
-    ([statusCode, response]) => {
-      const mediaType = response.content?.[OpenAPIContentType.JSON];
+function moveResponseSchemas(schemas: Record<string, OpenAPISchema>, operation: OpenAPIOperation) {
+  Object.entries(operation.responses ?? {}).forEach(([statusCode, response]) => {
+    const mediaType = response.content?.[OpenAPIContentType.JSON];
 
-      if (!mediaType?.schema || isReference(mediaType.schema)) {
-        return;
-      }
+    if (!mediaType?.schema || isReference(mediaType.schema)) {
+      return;
+    }
 
-      const componentName = toResponseComponentName(
-        operation.operationId!,
-        statusCode,
-      );
-      schemas[componentName] = mediaType.schema;
-      mediaType.schema = toReference(componentName);
-    },
-  );
+    const componentName = toResponseComponentName(operation.operationId!, statusCode);
+    schemas[componentName] = mediaType.schema;
+    mediaType.schema = toReference(componentName);
+  });
 }
 
 function toResponseComponentName(operationId: string, statusCode: string) {
@@ -142,8 +120,7 @@ function toResponseComponentName(operationId: string, statusCode: string) {
     return `${toPascalCase(operationId)}Response`;
   }
 
-  const suffix =
-    RESPONSE_SUFFIX_BY_STATUS[statusCode] ?? `Status${statusCode}Response`;
+  const suffix = RESPONSE_SUFFIX_BY_STATUS[statusCode] ?? `Status${statusCode}Response`;
   return `${toPascalCase(operationId)}${suffix}`;
 }
 

@@ -1,13 +1,12 @@
-import {
-  PrismaClient,
-  GlobalPolicy as PrismaGlobalPolicy,
-} from "@/generated/prisma/client";
-
 import { GlobalPolicy } from "@/domain/entities/global-policy";
 import { NotificationChannel } from "@/domain/entities/values/notification-channel";
 import { NotificationType } from "@/domain/entities/values/notification-type";
 import { Region } from "@/domain/entities/values/region";
+
 import { IGlobalPoliciesRepository } from "@/domain/interfaces/global-policies.repo";
+
+import { PrismaClient, GlobalPolicy as PrismaGlobalPolicy } from "@/generated/prisma/client";
+
 import { prismaQuery } from "./lib";
 
 const toEntity = (record: PrismaGlobalPolicy): GlobalPolicy => ({
@@ -17,9 +16,7 @@ const toEntity = (record: PrismaGlobalPolicy): GlobalPolicy => ({
   enabled: record.enabled,
 });
 
-export const buildGlobalPoliciesRepository = (
-  prisma: PrismaClient,
-): IGlobalPoliciesRepository => {
+export const buildGlobalPoliciesRepository = (prisma: PrismaClient): IGlobalPoliciesRepository => {
   return {
     get: prismaQuery(async (filters) => {
       const record = await prisma.globalPolicy.findUnique({

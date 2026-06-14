@@ -1,9 +1,6 @@
 import { UserQuietHours } from "@/domain/entities/user-preferences";
 
-export function isInQuietHours(
-  datetime: Date,
-  quietHours: UserQuietHours,
-): boolean {
+export function isInQuietHours(datetime: Date, quietHours: UserQuietHours): boolean {
   const formatter = new Intl.DateTimeFormat("en-CA", {
     timeZone: quietHours.timezone,
     hour: "2-digit",
@@ -22,12 +19,8 @@ export function isInQuietHours(
   const endTotalMinutes = endHours * 60 + endMinutes;
 
   if (startTotalMinutes <= endTotalMinutes) {
-    return (
-      currentMinutes >= startTotalMinutes && currentMinutes <= endTotalMinutes
-    );
+    return currentMinutes >= startTotalMinutes && currentMinutes <= endTotalMinutes;
   }
 
-  return (
-    currentMinutes >= startTotalMinutes || currentMinutes <= endTotalMinutes
-  );
+  return currentMinutes >= startTotalMinutes || currentMinutes <= endTotalMinutes;
 }

@@ -1,9 +1,10 @@
+import { Repositories } from "@/domain/interfaces/repo";
+
 import { PrismaClient } from "@/generated/prisma/client";
 
-import { Repositories } from "@/domain/interfaces/repo";
 import { buildDefaultPreferencesRepository } from "./default-preferences.repo";
-import { buildUserPreferencesRepository } from "./user-preferences.repo";
 import { buildGlobalPoliciesRepository } from "./global-policies.repo";
+import { buildUserPreferencesRepository } from "./user-preferences.repo";
 
 export const buildRepositories = (prisma: PrismaClient): Repositories => {
   return {

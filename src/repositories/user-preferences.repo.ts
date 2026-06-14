@@ -1,16 +1,15 @@
+import { UserPreference, UserQuietHours } from "@/domain/entities/user-preferences";
+import { NotificationChannel } from "@/domain/entities/values/notification-channel";
+import { NotificationType } from "@/domain/entities/values/notification-type";
+
+import { IUserPreferencesRepository } from "@/domain/interfaces/user-preferences.repo";
+
 import {
   PrismaClient,
   UserPreference as PrismaUserPreference,
   UserQuietHours as PrismaUserQuietHours,
 } from "@/generated/prisma/client";
 
-import { NotificationChannel } from "@/domain/entities/values/notification-channel";
-import { NotificationType } from "@/domain/entities/values/notification-type";
-import { IUserPreferencesRepository } from "@/domain/interfaces/user-preferences.repo";
-import {
-  UserPreference,
-  UserQuietHours,
-} from "@/domain/entities/user-preferences";
 import { prismaQuery } from "./lib";
 
 const toUserPreference = (record: PrismaUserPreference): UserPreference => ({

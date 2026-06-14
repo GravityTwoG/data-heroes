@@ -1,16 +1,14 @@
-import { describe, it, expect, beforeAll, afterAll } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import type { FastifyInstance } from "fastify";
 
 import { NotificationChannel } from "@/domain/entities/values/notification-channel";
 import { NotificationType } from "@/domain/entities/values/notification-type";
 import { Decision, Reason } from "@/domain/usecases/preferences/evaluate";
-import { DefaultPreference } from "@/domain/entities/default-preference";
-import { GlobalPolicy } from "@/domain/entities/global-policy";
 import {
   createTestApp,
-  truncateAll,
   seedDefaultPreferences,
   seedGlobalPolicies,
+  truncateAll,
 } from "./helpers";
 
 describe.sequential("POST /api/v1/users/:id/preferences/evaluate", () => {

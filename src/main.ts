@@ -1,4 +1,5 @@
 import { parseConfig } from "@/config";
+
 import { createApp } from "./app";
 
 const bootstrap = async () => {

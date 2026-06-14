@@ -1,6 +1,9 @@
-import { UseCases } from "@/domain/usecases";
-import { Logger } from "@/lib/logger";
 import { FastifyInstance } from "fastify";
+
+import { Logger } from "@/lib/logger";
+
+import { UseCases } from "@/domain/usecases";
+
 import { registerPreferncesRoutes } from "./preferences";
 
 export const registerRoutes = ({

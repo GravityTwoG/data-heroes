@@ -1,10 +1,6 @@
+import { UserPreference, UserPreferences, UserQuietHours } from "../entities/user-preferences";
 import { NotificationChannel } from "../entities/values/notification-channel";
 import { NotificationType } from "../entities/values/notification-type";
-import {
-  UserPreference,
-  UserPreferences,
-  UserQuietHours,
-} from "../entities/user-preferences";
 
 export interface IUserPreferencesRepository {
   get(userId: string): Promise<UserPreferences | null>;

@@ -1,0 +1,75 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "printWidth": 100,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
+  "singleQuote": false,
+  "trailingComma": "all",
+  "bracketSpacing": true,
+  "sortImports": {
+    "customGroups": [
+      {
+        "groupName": "lib",
+        "elementNamePattern": ["@/lib/**"]
+      },
+      {
+        "groupName": "domain-entities",
+        "elementNamePattern": ["@/domain/entities/**"]
+      },
+      {
+        "groupName": "domain-interfaces",
+        "elementNamePattern": ["@/domain/interfaces/**"]
+      },
+      {
+        "groupName": "domain-usecases",
+        "elementNamePattern": ["@/domain/usecases/**"]
+      },
+      {
+        "groupName": "domain",
+        "elementNamePattern": ["@/domain/**"]
+      },
+      {
+        "groupName": "http",
+        "elementNamePattern": ["@/http/**"]
+      },
+      {
+        "groupName": "repositories",
+        "elementNamePattern": ["@/repositories/**"]
+      },
+      {
+        "groupName": "generated",
+        "elementNamePattern": ["@/generated/**"]
+      },
+      {
+        "groupName": "test",
+        "elementNamePattern": ["@/test/**"]
+      },
+      {
+        "groupName": "app",
+        "elementNamePattern": ["@/**"]
+      }
+    ],
+    "groups": [
+      "builtin",
+      "external",
+      "lib",
+      "domain-entities",
+      "domain-interfaces",
+      "domain-usecases",
+      "domain",
+      "http",
+      "repositories",
+      "generated",
+      "test",
+      "app",
+      ["parent", "sibling", "index"],
+      "style",
+      "unknown"
+    ],
+    "newlinesBetween": true
+  },
+  "arrowParens": "always",
+  "insertFinalNewline": true,
+  "endOfLine": "lf"
+}

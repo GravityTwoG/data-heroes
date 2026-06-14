@@ -16,7 +16,11 @@
     "test": "vitest run --project unit",
     "test:e2e": "vitest run --project e2e",
     "test:watch": "vitest --project unit",
-    "test:coverage": "vitest run --project unit --project e2e --coverage"
+    "test:coverage": "vitest run --project unit --project e2e --coverage",
+    "lint": "oxlint . --ignore-pattern dist --ignore-pattern node_modules --ignore-pattern dev-dist",
+    "lint:fix": "oxlint --fix . --ignore-pattern dist --ignore-pattern node_modules --ignore-pattern dev-dist",
+    "fmt": "oxfmt src",
+    "fmt:check": "oxfmt --check src"
   },
   "dependencies": {
     "@fastify/swagger": "^9.7.0",
@@ -33,6 +37,8 @@
     "@swc/core": "^1.15.41",
     "@testcontainers/postgresql": "^12.0.2",
     "@vitest/coverage-v8": "^4.1.8",
+    "oxfmt": "^0.54.0",
+    "oxlint": "^1.69.0",
     "prisma": "^7.8.0",
     "testcontainers": "^12.0.2",
     "tsx": "^4.22.4",

@@ -1,0 +1,20 @@
+{
+  "plugins": ["eslint", "import", "unicorn", "typescript"],
+  "rules": {
+    "import/first": "warn",
+    "import/no-duplicates": "error",
+    "no-duplicate-imports": "error",
+    "no-unused-vars": "error",
+    "sort-imports": [
+      "error",
+      {
+        "ignoreCase": true,
+        "ignoreDeclarationSort": true,
+        "ignoreMemberSort": false,
+        "memberSyntaxSortOrder": ["none", "all", "multiple", "single"],
+        "allowSeparatedGroups": true
+      }
+    ],
+    "unicorn/no-empty-file": "error"
+  }
+}

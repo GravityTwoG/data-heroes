@@ -2,14 +2,17 @@ import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { z } from "zod";
 
 import { Logger } from "@/lib/logger";
+
+import { isTimeValid } from "@/domain/entities/values/is-time-valid";
+import { isTimezoneValid } from "@/domain/entities/values/is-timezone-valid";
 import { validNotificationChannels } from "@/domain/entities/values/notification-channel";
 import { validNotificationTypes } from "@/domain/entities/values/notification-type";
 import { isRegionValid } from "@/domain/entities/values/region";
-import { isTimeValid } from "@/domain/entities/values/is-time-valid";
-import { isTimezoneValid } from "@/domain/entities/values/is-timezone-valid";
 
 import { Decision } from "@/domain/usecases/preferences/evaluate";
+
 import type { UseCases } from "@/domain/usecases";
+
 import { ErrorSchema } from "../lib/error-schema";
 import { OpenAPIOperationId } from "../lib/openapi-operation-ids";
 
@@ -25,9 +28,7 @@ const NotificationChannelSchema = z.enum(validNotificationChannels);
 
 const NotificationTypeSchema = z.enum(validNotificationTypes);
 
-const RegionSchema = z
-  .string()
-  .refine(isRegionValid, { message: "Invalid region code" });
+const RegionSchema = z.string().refine(isRegionValid, { message: "Invalid region code" });
 
 const ChannelSchema = z.object({
   channel: NotificationChannelSchema,

@@ -1,11 +1,13 @@
 import { AsyncLocalStorage } from "node:async_hooks";
 
 import { buildLogger } from "@/lib/logger";
-import { Config } from "@/config";
 import { buildPrismaClient } from "@/lib/prisma";
-import { buildRepositories } from "@/repositories";
+
 import { buildUseCases } from "@/domain/usecases";
+
+import { Config } from "@/config";
 import { buildHTTPServer } from "@/http";
+import { buildRepositories } from "@/repositories";
 
 export const createApp = async ({ config }: { config: Config }) => {
   const requestALS = new AsyncLocalStorage<{ requestId: string }>();

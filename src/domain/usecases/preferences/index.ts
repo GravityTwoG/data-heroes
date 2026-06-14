@@ -1,10 +1,12 @@
 import { Logger } from "@/lib/logger";
+
 import { IDefaultPreferencesRepository } from "@/domain/interfaces/default-preferences.repo";
+import { IGlobalPoliciesRepository } from "@/domain/interfaces/global-policies.repo";
+import { IUserPreferencesRepository } from "@/domain/interfaces/user-preferences.repo";
+
 import { buildEvaluatePreferences } from "./evaluate";
 import { buildGetPreferences } from "./get";
 import { buildUpdatePreferences } from "./update";
-import { IUserPreferencesRepository } from "@/domain/interfaces/user-preferences.repo";
-import { IGlobalPoliciesRepository } from "@/domain/interfaces/global-policies.repo";
 
 export const buildPreferences = (params: {
   repositories: {

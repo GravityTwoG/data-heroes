@@ -1,8 +1,10 @@
 import { execSync } from "node:child_process";
 import { resolve } from "node:path";
 
-import { PostgreSqlContainer } from "@testcontainers/postgresql";
-import type { StartedPostgreSqlContainer } from "@testcontainers/postgresql";
+import {
+  PostgreSqlContainer,
+  type StartedPostgreSqlContainer,
+} from "@testcontainers/postgresql";
 
 let container: StartedPostgreSqlContainer;
 
@@ -16,7 +18,6 @@ export async function setup() {
     cwd: resolve(__dirname, "../../.."),
     stdio: "pipe",
   });
-
 }
 
 export async function teardown() {
