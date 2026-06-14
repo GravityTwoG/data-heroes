@@ -22,7 +22,9 @@ export const buildDefaultPreferencesRepository = (
 ): IDefaultPreferencesRepository => {
   return {
     list: prismaQuery(async () => {
-      const records = await prisma.defaultPreference.findMany();
+      const records = await prisma.defaultPreference.findMany({
+        orderBy: [{ type: "asc" }, { channel: "asc" }],
+      });
       return records.map(toEntity);
     }),
 

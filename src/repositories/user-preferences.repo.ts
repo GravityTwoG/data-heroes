@@ -31,7 +31,7 @@ export const buildUserPreferencesRepository = (
     const where = { userId };
 
     const [channels, quietHours] = await Promise.all([
-      prisma.userPreference.findMany({ where }),
+      prisma.userPreference.findMany({ where, orderBy: [{ type: "asc" }, { channel: "asc" }] }),
       prisma.userQuietHours.findUnique({ where }),
     ]);
 
