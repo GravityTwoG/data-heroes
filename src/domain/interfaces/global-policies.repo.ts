@@ -1,7 +1,7 @@
-import { GlobalPolicy } from "../entities/global-policy";
-import { NotificationChannel } from "../entities/notification-channel";
-import { NotificationType } from "../entities/notification-type";
-import { Region } from "../entities/region";
+import { GlobalPolicy } from "@/domain/entities/global-policy";
+import { NotificationChannel } from "@/domain/entities/values/notification-channel";
+import { NotificationType } from "@/domain/entities/values/notification-type";
+import { Region } from "@/domain/entities/values/region";
 
 export interface IGlobalPoliciesRepository {
   get(filters: {

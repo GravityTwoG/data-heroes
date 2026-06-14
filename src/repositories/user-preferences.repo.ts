@@ -4,6 +4,8 @@ import {
   UserQuietHours as PrismaUserQuietHours,
 } from "@/generated/prisma/client";
 
+import { NotificationChannel } from "@/domain/entities/values/notification-channel";
+import { NotificationType } from "@/domain/entities/values/notification-type";
 import { IUserPreferencesRepository } from "@/domain/interfaces/user-preferences.repo";
 import {
   UserPreference,
@@ -11,18 +13,16 @@ import {
 } from "@/domain/entities/user-preferences";
 import { prismaQuery } from "./lib";
 
-// Сейчас маппинг практически ничего не делает, но если модель хранения и
-// доменная модель сильно разойдутся, то маппинг уже будет централизован в одном месте
 const toUserPreference = (record: PrismaUserPreference): UserPreference => ({
-  channel: record.channel as UserPreference["channel"],
-  type: record.type as UserPreference["type"],
+  channel: record.channel as NotificationChannel,
+  type: record.type as NotificationType,
   enabled: record.enabled,
 });
 
 const toQuietHours = (record: PrismaUserQuietHours): UserQuietHours => ({
-  start: record.start,
-  end: record.end,
-  timezone: record.timezone,
+  start: record.start as string,
+  end: record.end as string,
+  timezone: record.timezone as string,
 });
 
 export const buildUserPreferencesRepository = (

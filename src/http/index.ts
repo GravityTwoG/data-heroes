@@ -107,7 +107,9 @@ export function buildHTTPServer({
     if (err instanceof DomainError) {
       return rep.status(400).send({ message: err.message });
     }
-    throw err;
+    return rep
+      .status((err as any).statusCode || 500)
+      .send({ message: (err as any).message });
   });
 
   registerRoutes({ app, useCases, logger });

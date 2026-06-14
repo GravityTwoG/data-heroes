@@ -1,9 +1,9 @@
-import { NotificationChannel } from "./notification-channel";
-import { NotificationType } from "./notification-type";
+import { NotificationChannel } from "./values/notification-channel";
+import { NotificationType } from "./values/notification-type";
 
 export type UserPreference = {
-  channel: NotificationChannel;
   type: NotificationType;
+  channel: NotificationChannel;
   enabled: boolean;
 };
 

@@ -1,6 +1,6 @@
 import { Logger } from "@/lib/logger";
 import { IDefaultPreferencesRepository } from "@/domain/interfaces/default-preferences.repo";
-import { buildEvaluatePreferences } from "./evaluate/evaluate";
+import { buildEvaluatePreferences } from "./evaluate";
 import { buildGetPreferences } from "./get";
 import { buildUpdatePreferences } from "./update";
 import { IUserPreferencesRepository } from "@/domain/interfaces/user-preferences.repo";

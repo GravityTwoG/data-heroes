@@ -1,6 +1,6 @@
 import { DefaultPreference } from "../entities/default-preference";
-import { NotificationChannel } from "../entities/notification-channel";
-import { NotificationType } from "../entities/notification-type";
+import { NotificationChannel } from "../entities/values/notification-channel";
+import { NotificationType } from "../entities/values/notification-type";
 
 export interface IDefaultPreferencesRepository {
   list(): Promise<DefaultPreference[]>;

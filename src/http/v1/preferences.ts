@@ -2,18 +2,32 @@ import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { z } from "zod";
 
 import { Logger } from "@/lib/logger";
-import { validNotificationChannels } from "@/domain/entities/notification-channel";
-import { validNotificationTypes } from "@/domain/entities/notification-type";
+import { validNotificationChannels } from "@/domain/entities/values/notification-channel";
+import { validNotificationTypes } from "@/domain/entities/values/notification-type";
+import { isRegionValid } from "@/domain/entities/values/region";
+import { isTimeValid } from "@/domain/entities/values/is-time-valid";
+import { isTimezoneValid } from "@/domain/entities/values/is-timezone-valid";
+
+import { Decision } from "@/domain/usecases/preferences/evaluate";
 import type { UseCases } from "@/domain/usecases";
 import { ErrorSchema } from "../lib/error-schema";
 import { OpenAPIOperationId } from "../lib/openapi-operation-ids";
 
-import { TimeStringSchema } from "../lib/time-schema";
-import { TimezoneSchema } from "../lib/timezone-schema";
+const TimeStringSchema = z.string().refine(isTimeValid, {
+  message: "Invalid time",
+});
+
+const TimezoneSchema = z.string().refine(isTimezoneValid, {
+  message: "Invalid timezone",
+});
 
 const NotificationChannelSchema = z.enum(validNotificationChannels);
 
 const NotificationTypeSchema = z.enum(validNotificationTypes);
+
+const RegionSchema = z
+  .string()
+  .refine(isRegionValid, { message: "Invalid region code" });
 
 const ChannelSchema = z.object({
   channel: NotificationChannelSchema,
@@ -48,12 +62,12 @@ const UpdateUserPreferencesSchema = z.object({
 const EvaluatePreferencesSchema = z.object({
   channel: NotificationChannelSchema,
   type: NotificationTypeSchema,
-  region: z.string(), // TODO: set format
-  datetime: z.coerce.date(), // TODO: set format
+  region: RegionSchema,
+  datetime: z.coerce.date(),
 });
 
 const EvaluateResultSchema = z.object({
-  decision: z.enum(["allow", "deny"]),
+  decision: z.enum(Object.values(Decision)),
   reason: z.string(),
 });
 
@@ -88,12 +102,10 @@ export const registerPreferncesRoutes: FastifyPluginAsyncZod<{
       },
     },
     handler: async (req) => {
-      const { preference, quietHours } = req.body;
-
       return useCases.updatePreferences({
+        ...req.body,
+
         userId: req.params.id,
-        channel: preference,
-        quietHours,
       });
     },
   });

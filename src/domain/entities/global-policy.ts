@@ -1,10 +1,10 @@
-import { NotificationChannel } from "./notification-channel";
-import { NotificationType } from "./notification-type";
-import { Region } from "./region";
+import { NotificationChannel } from "./values/notification-channel";
+import { NotificationType } from "./values/notification-type";
+import { Region } from "./values/region";
 
 export type GlobalPolicy = {
-  channel: NotificationChannel;
   type: NotificationType;
-  enabled: boolean;
+  channel: NotificationChannel;
   region: Region;
+  enabled: boolean;
 };

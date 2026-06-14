@@ -13,9 +13,10 @@
     "build": "swc src scripts -d dist --source-maps --delete-dir-on-start --ignore '**/*.test.ts,**/*.d.ts'",
     "openapi:generate": "tsx scripts/generate-openapi.ts",
     "typecheck": "tsc -b",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test": "vitest run --project unit",
+    "test:e2e": "vitest run --project e2e",
+    "test:watch": "vitest --project unit",
+    "test:coverage": "vitest run --project unit --project e2e --coverage"
   },
   "dependencies": {
     "@fastify/swagger": "^9.7.0",

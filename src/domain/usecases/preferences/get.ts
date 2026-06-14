@@ -37,6 +37,6 @@ export const buildGetPreferences = (params: Params) => {
       userId: dto.userId,
       channels: Array.from(channelMap.values()),
       quietHours: userPrefs?.quietHours ?? null,
-    };
+    } as UserPreferences;
   };
 };

@@ -1,20 +1,20 @@
 import { Values } from "@/lib/typescript";
 import { Logger } from "@/lib/logger";
-import { NotificationChannel } from "@/domain/entities/notification-channel";
-import { NotificationType } from "@/domain/entities/notification-type";
-import { Region } from "@/domain/entities/region";
+import { NotificationChannel } from "@/domain/entities/values/notification-channel";
+import { NotificationType } from "@/domain/entities/values/notification-type";
+import { Region } from "@/domain/entities/values/region";
 import { IDefaultPreferencesRepository } from "@/domain/interfaces/default-preferences.repo";
 import { IGlobalPoliciesRepository } from "@/domain/interfaces/global-policies.repo";
 import { IUserPreferencesRepository } from "@/domain/interfaces/user-preferences.repo";
 import { isInQuietHours } from "./is-in-quiet-hours";
 
-const Decision = {
+export const Decision = {
   ALLOW: "allow",
   DENY: "deny",
 } as const;
-type Decision = Values<typeof Decision>;
+export type Decision = Values<typeof Decision>;
 
-const Reason = {
+export const Reason = {
   ALLOWED_BY_GLOBAL_POLICY: "allowed_by_global_policy",
   ALLOWED_BY_USER_PREFERENCES: "allowed_by_user_preferences",
   ALLOWED_BY_DEFAULT_PREFERENCES: "allowed_by_default_preferences",
@@ -24,7 +24,7 @@ const Reason = {
   BLOCKED_BY_QUIET_HOURS: "blocked_by_quiet_hours",
   BLOCKED_BY_DEFAULT_PREFERENCES: "blocked_by_default_preferences",
 } as const;
-type Reason = Values<typeof Reason>;
+export type Reason = Values<typeof Reason>;
 
 type EvaluateResult = {
   decision: Decision;

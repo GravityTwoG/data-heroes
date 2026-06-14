@@ -6,10 +6,10 @@ export const NotificationType = {
 } as const;
 export type NotificationType = Values<typeof NotificationType>;
 
-export const validNotificationTypes = Object.values(
-  NotificationType,
-);
+export const validNotificationTypes = Object.values(NotificationType);
 
-export const isNotificationTypeValid = (value: string) => {
+export const isNotificationTypeValid = (
+  value: string,
+): value is NotificationType => {
   return (validNotificationTypes as string[]).includes(value);
 };

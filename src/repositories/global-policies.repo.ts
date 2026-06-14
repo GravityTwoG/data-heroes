@@ -4,14 +4,17 @@ import {
 } from "@/generated/prisma/client";
 
 import { GlobalPolicy } from "@/domain/entities/global-policy";
+import { NotificationChannel } from "@/domain/entities/values/notification-channel";
+import { NotificationType } from "@/domain/entities/values/notification-type";
+import { Region } from "@/domain/entities/values/region";
 import { IGlobalPoliciesRepository } from "@/domain/interfaces/global-policies.repo";
 import { prismaQuery } from "./lib";
 
 const toEntity = (record: PrismaGlobalPolicy): GlobalPolicy => ({
-  channel: record.channel as GlobalPolicy["channel"],
-  type: record.type as GlobalPolicy["type"],
+  channel: record.channel as NotificationChannel,
+  type: record.type as NotificationType,
+  region: record.region as Region,
   enabled: record.enabled,
-  region: record.region as GlobalPolicy["region"],
 });
 
 export const buildGlobalPoliciesRepository = (

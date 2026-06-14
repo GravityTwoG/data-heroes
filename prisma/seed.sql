@@ -8,7 +8,7 @@ VALUES
   ('marketing', 'telegram', true),
   ('marketing', 'whatsapp', true),
   ('marketing', 'max', true),
-  ('marketing', 'push', true),
+
   ('transaction', 'email', true),
   ('transaction', 'sms', true),
   ('transaction', 'telegram', true),

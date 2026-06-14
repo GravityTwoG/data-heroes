@@ -14,7 +14,7 @@ type Params = {
 
 type UpdatePreferencesParams = {
   userId: string;
-  channel?: UserPreference;
+  preference?: UserPreference;
   quietHours?: UserQuietHours | null;
 };
 
@@ -23,10 +23,10 @@ export const buildUpdatePreferences = (params: Params) => {
   const logger = params.logger;
 
   return async (dto: UpdatePreferencesParams): Promise<void> => {
-    const { userId, channel, quietHours } = dto;
+    const { userId, preference, quietHours } = dto;
 
-    await userRepo.upsert(userId, { preference: channel, quietHours });
+    await userRepo.upsert(userId, { preference, quietHours });
 
-    logger.info({ userId, channel, quietHours }, "preferences_updated");
+    logger.info({ userId, preference, quietHours }, "preferences_updated");
   };
 };
