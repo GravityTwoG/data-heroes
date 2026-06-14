@@ -7,6 +7,72 @@
 
 ---
 
+## Запуск
+
+### Docker (рекомендуется)
+
+```bash
+cp .env.example .env
+docker compose up --build
+```
+
+Сервис поднимается на `http://localhost:3000`.  
+Swagger UI: `http://localhost:3000/docs`.
+
+Миграции применяются автоматически при старте контейнера.  
+Для засева дефолтных данных:
+
+```bash
+docker compose exec app npm run db:seed
+```
+
+### Локально
+
+Требуется Node.js 24.13.0 и Docker c плагином Compose.
+
+```bash
+cp .env.example .env
+npm ci
+npm run dev   # поднимает postgres в Docker и запускает сервис с hot reload
+```
+
+Сервис поднимается на `http://localhost:3000`.  
+Swagger UI: `http://localhost:3000/docs`.
+
+---
+
+## Тесты
+
+Тесты запускаются локально — не внутри Docker. Нужны установленные зависимости и запущенный Docker (для Testcontainers в e2e).
+
+```bash
+npm ci
+```
+
+### Unit-тесты
+
+```bash
+npm test
+```
+
+### E2E-тесты
+
+Testcontainers автоматически поднимает изолированный PostgreSQL для каждого запуска.
+
+```bash
+npm run test:e2e
+```
+
+### Все тесты + coverage
+
+```bash
+npm run test:coverage
+```
+
+Покрытие доменной логики (`src/domain/usecases`) и репозиториев (`src/repositories/*.repo.ts`) — 100% по statements, branches и functions.
+
+---
+
 ## Решение
 
 Сервис не управляет пользователями — для него `userId` это просто внешний ключ, приходящий от смежных систем. 
@@ -25,10 +91,9 @@
   Предпочтения пользователя
   Предпочтения по умолчанию (низший приоритет)
 
-Предполагается, что все необходимые препочтения (комбинации типов и каналов) по умолчанию есть в БД. Если нет, то выбрасываем ошибку 400/404.
-
-Предполагается что все комбинации (тип, канал) валидны.
-Предполагается что все комбинации (тип, канал, регион) валидны.
+- Предполагается, что все необходимые препочтения (комбинации типов и каналов) по умолчанию есть в БД. Если нет, то выбрасываем ошибку 400/404.
+- Предполагается что все комбинации (тип, канал) валидны.
+- Предполагается что все комбинации (тип, канал, регион) валидны.
 
 API:
 1. Получение предпочтений пользователя `GET /users/:id/preferences`
@@ -40,7 +105,7 @@ API:
        {
          "type": "marketing",
          "channel": "email",
-         "enabled": true,
+         "enabled": true
        }
      ],
      "quietHours": null
@@ -52,21 +117,22 @@ API:
    - включение/выключение типа уведомления по каналу;
    - настройки quiet hours + timezone. Добавил timezone, чтобы учитывать часовой пояс и сдвигов летнего/зимнего времени
    - если quietHours null, то запись с quiet hours удаляется 
-     Вход:
+
+   Вход:
    ```json
    {
      "preference": {
        "type": "marketing",
        "channel": "email",
-       "enabled": false,
+       "enabled": false
      },
-     // OR
      "quietHours": {
        "start": "22:00",
        "end": "08:00",
        "timezone": "Europe/Moscow"
      }
    }
+   ```
 
 3. Проверка возможности отправки уведомления `POST /users/:id/preferences/evaluate`  
    Вход:
@@ -89,6 +155,8 @@ API:
 Системы авторизации нет, так как предполагается что сервис работает внутри сети и авторизация отдана на откуп инфре.
 
 Логируем изменение предпочтений и вынесение решение. Поддержка requestId из запроса.
+
+Имплементация репозиториев, юзкейсов, настройка тестового окружения в большей части выполнена кодинговым агентом. Я занимался проектированием и ревью кода.
 
 
 ## Доменная модель
@@ -209,7 +277,7 @@ CREATE TABLE user_quiet_hours (
   timezone TEXT NOT NULL,
 
   created_at TIMESTAMPTZ DEFAULT now(),
-  updated_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now()
 );
 
 CREATE TABLE global_policies (
@@ -234,27 +302,40 @@ CREATE TABLE global_policies (
 
 ## Стэк
 
-Platform: Node.js
-Language: TypeScript, SWC
-Persistence Layer: PostgreSQL, Prisma
-API: REST API via Fastify, Swagger
-Tests: vitest + testcontainers
+Platform: Node.js  
+Language: TypeScript, SWC  
+Persistence Layer: PostgreSQL, Prisma  
+API: REST API via Fastify, Swagger  
+Tests: vitest + testcontainers  
 
 ## Структура проекта
 
 ```
 src/
-  lib/ reusable, not domain specific utilities (logger)
-  repositories/ - repositories abstracting work with prisma, mapping db records to domain entities
+  lib/          reusable, not domain specific utilities (logger)
+  repositories/ repositories abstracting work with prisma, mapping db records to domain entities
   domain/
-    interfaces/   - definitions of interfaces required for domain
-    entities/     - domain entities decoupled from database records, error
-    services/     - reusable domain logic
-    usecases/     - business logic
-  http/  - exposing business logic via REST API
-  config.ts     - app config, validated by Zod
-  main.ts       - app bootstrap logic
-tests/e2e - e2e tests
+    interfaces/ definitions of interfaces required for domain
+    entities/   domain entities decoupled from database records, error
+    services/   reusable domain logic
+    usecases/   business logic
+  http/         exposing business logic via REST API
+  config.ts     app config, validated by Zod
+  main.ts       app bootstrap logic
+tests/e2e       e2e tests
 Dockerfile
-docker-compose.yaml
+docker-compose.yml
 ```
+
+---
+
+## Что добавить для продакшена
+
+- Кэширование - выполнять чтение через кэш, данные вряд ли будут часто меняться. При записи - запись одновременно в основую бд и кэш.
+- Health-check эндпоинты
+- Graceful shutdown - дожидаться завершения текущих запросов запросов перед отключением сервера.
+- Рейт-лимиты
+- Хранить историю изменений настроек пользователя.
+- Если предпочтений будет становиться больше, возможно потребуется пагинация.
+- Эндпоинты для управления дефолтными предпочтениями и глобальными политиками
+- Гит-хуки для проверки форматирования, типов, запуска юнит тестов, conventional commits
