@@ -11,6 +11,7 @@ const bootstrap = async () => {
 
   httpServer.listen({
     port: config.port,
+    host: "0.0.0.0",
   });
 };
 

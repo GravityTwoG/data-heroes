@@ -1,9 +1,8 @@
-import { FastifyInstance } from "fastify";
-
 import { Logger } from "@/lib/logger";
 
 import { UseCases } from "@/domain/usecases";
 
+import type { FastifyApp } from "../types";
 import { registerPreferncesRoutes } from "./preferences";
 
 export const registerRoutes = ({
@@ -11,7 +10,7 @@ export const registerRoutes = ({
   useCases,
   logger,
 }: {
-  app: FastifyInstance;
+  app: FastifyApp;
   useCases: UseCases;
   logger: Logger;
 }) => {

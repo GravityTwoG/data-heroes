@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import type { FastifyInstance } from "fastify";
+import type { FastifyApp } from "@/http/types";
 
 import { NotificationChannel } from "@/domain/entities/values/notification-channel";
 import { NotificationType } from "@/domain/entities/values/notification-type";
@@ -12,7 +12,7 @@ import {
 } from "./helpers";
 
 describe.sequential("POST /api/v1/users/:id/preferences/evaluate", () => {
-  let app: FastifyInstance;
+  let app: FastifyApp;
 
   beforeAll(async () => {
     app = await createTestApp();
